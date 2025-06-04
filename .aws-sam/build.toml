@@ -5,7 +5,7 @@ codeuri = "/Users/jasonoh/Documents/projects/stock-price-movement/api_polling"
 runtime = "python3.13"
 architecture = "x86_64"
 handler = "app.lambda_handler"
-manifest_hash = "d41d8cd98f00b204e9800998ecf8427e"
+manifest_hash = "635489871a52699acf02c77669b6c0b9"
 packagetype = "Zip"
 functions = ["ApiPollingFunction"]
 

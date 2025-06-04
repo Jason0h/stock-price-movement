@@ -55,24 +55,20 @@ Resources:
           Properties:
             Queue: !GetAtt EventQueue.Arn
             BatchSize: 10
-    
-  LambdaExecutionRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action: sts:AssumeRole
       Policies:
-        - PolicyName: EventQueuePolicy
-          PolicyDocument:
-            Statement:
-              - Effect: Allow
-                Action:
-                  - sqs:ReceiveMessage
-                Resource: !GetAtt EventQueue.Arn
+        - DynamoDBCrudPolicy: 
+            TableName:
+              !Ref StockPriceTable
+        - SQSPollerPolicy:
+            QueueName:
+              !Ref EventQueue
+  
+  StockPriceTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey: 
+        Name: Date
+        Type: String
   
   MovementDetectingFunction:
     Type: AWS::Serverless::Function
@@ -82,3 +78,16 @@ Resources:
       Runtime: python3.13
       Architectures:
         - x86_64
+      Policies:
+        - DynamoDBCrudPolicy: 
+            TableName:
+              !Ref StockPriceTable
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt MovementSNSTopic.TopicName
+  
+  MovementSNSTopic:
+    Type: AWS::SNS::Topic
+  
+Outputs:
+  MovementSNSTopicArn:
+    Value: !Ref MovementSNSTopic
