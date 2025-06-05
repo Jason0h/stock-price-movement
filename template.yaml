@@ -64,11 +64,22 @@ Resources:
               !Ref EventQueue
   
   StockPriceTable:
-    Type: AWS::Serverless::SimpleTable
+    Type: AWS::DynamoDB::Table
     Properties:
-      PrimaryKey: 
-        Name: Date
-        Type: String
+      TableName: StockPriceTable
+      AttributeDefinitions:
+        - AttributeName: Primary
+          AttributeType: S
+        - AttributeName: DateTime
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Primary
+          KeyType: HASH        
+        - AttributeName: DateTime
+          KeyType: RANGE       
+      BillingMode: PAY_PER_REQUEST
+      StreamSpecification:
+        StreamViewType: KEYS_ONLY
   
   MovementDetectingFunction:
     Type: AWS::Serverless::Function
@@ -84,6 +95,12 @@ Resources:
               !Ref StockPriceTable
         - SNSPublishMessagePolicy:
             TopicName: !GetAtt MovementSNSTopic.TopicName
+      Events:
+        DynamoDBStream:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt StockPriceTable.StreamArn
+            StartingPosition: LATEST
   
   MovementSNSTopic:
     Type: AWS::SNS::Topic
