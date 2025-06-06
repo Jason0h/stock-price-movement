@@ -1,4 +1,4 @@
-<img src="./image.png" alt="Banner" style="width: 40%;" />
+<img src="./image.png" alt="Banner" style="width: 60%;" />
 
 # NVIDIA Price Movement Detector
 **stock-price-movement** detects movements to NVIDIA stock price using market data fetched from [Yahoo!Ⓡ finance](https://finance.yahoo.com/). In current configuration of the application, the threshhold is ±$0.50 in a 5 minute interval
