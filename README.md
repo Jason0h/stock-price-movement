@@ -12,7 +12,7 @@ graph LR
 ```
 The diagram above illustrates the flow of information in the application system. api_polling and movement_detecting are lambda functions defined in the project repository
 
-You can read my brief reflections on ---to be included---
+You can read my brief reflections on [https://dev.to/jason_oh/stock-price-movement-reflections](https://dev.to/jason_oh_242b4e371630fdac/stock-price-movement-reflections-4m8)
 
 ## Accessing the Production Service
 The output of **stock-price-movement** is an SNS notification every time a movement is detected. A Gmail account has been created and is subscribed to the SNS notifications for the purpose of demonstration. You can access the Gmail inbox via:  
