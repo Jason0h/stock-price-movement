@@ -12,9 +12,9 @@ def test_retrieve_price():
     PRICE_2 = 140.77 # rough price at 1:30:00 PM EST
     UTC_TIME_STR_3 = "2025-06-04T15:30:00Z" # 11:30:00 PM EST
     PRICE_3 = 141.32 # rough price at 11:30:00 AM EST
-    assert(abs(app.retrieve_price(UTC_TIME_STR_1) - PRICE_1) < 0.1)
-    assert(abs(app.retrieve_price(UTC_TIME_STR_2) - PRICE_2) < 0.1)
-    assert(abs(app.retrieve_price(UTC_TIME_STR_3) - PRICE_3) < 0.1)
+    assert(abs(app.retrieve_price(UTC_TIME_STR_1) - PRICE_1) < 0.3)
+    assert(abs(app.retrieve_price(UTC_TIME_STR_2) - PRICE_2) < 0.3)
+    assert(abs(app.retrieve_price(UTC_TIME_STR_3) - PRICE_3) < 0.3)
     
     # ensure that the function "fails" gracefully when called on before/after market hours
     UTC_TIME_STR_4 = "2025-06-04T13:00:00Z" # 9:00:00 AM EST

@@ -4,12 +4,12 @@ from datetime import datetime as dt
 from datetime import timedelta as td
 import os
 
-MOVEMENT_THRESHOLD = 0.30 # $0.30
+MOVEMENT_THRESHOLD = 0.01 # $0.30
 TIME_THRESHOLD = td(minutes=5, seconds=30)
 
 def lambda_handler(event, context) -> None:
     est_time_str = event["Records"][0]["dynamodb"]["Keys"]["DateTime"]["S"]
-    detected, info = detect_movement(dt.strptime(est_time_str, "%Y-%m-%dT%H:%M:%SZ"))
+    detected, info = detect_movement(est_time_str.replace(" ", "T") + "Z")
     print(detected, info)
     if detected:
         notify_of_movement(info)
@@ -35,11 +35,14 @@ def detect_movement(est_time_str) -> tuple[bool, tuple | None]:
     if abs(movement) < MOVEMENT_THRESHOLD:
         movement_detected = False
     # (early_datetime, late_datetime, early_price, late_price, price_movement)
-    return movement_detected, (earlyItem[0], lateItem[0], earlyItem[1], lateItem[1], movement)
+    return movement_detected, (earlyItem[0].strftime("%Y-%m-%dT%H:%M:%SZ"), lateItem[0].strftime("%Y-%m-%dT%H:%M:%SZ"), 
+                               earlyItem[1], lateItem[1], movement)
 
-def notify_of_movement(info) -> None:
+def notify_of_movement(info) -> str:
     sns_topic_arn = os.environ.get("SNS_TOPIC_ARN")
-    boto3.client("sns").publish(
+    message = f"Movement Detected: {info[0]} -> {info[1]}. ${info[2]:.2f} -> ${info[3]:.2f}. {"-" if info[4] < 0 else "+"}${abs(info[4]):.2f}"
+    boto3.client("sns", region_name="us-east-1").publish(
         TopicArn = sns_topic_arn,
-        Message = f"Movement Detected: {info[0]} -> {info[1]}. {info[2]} -> {info[3]}. {"-" if info[4] < 0 else "+"}{info[4]}"
+        Message = message
     )
+    return message

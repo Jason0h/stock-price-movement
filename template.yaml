@@ -7,13 +7,13 @@ Description: >
 
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 10
 
 Resources:
   CloudWatchEvent:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: "rate(5 minutes)"
+      ScheduleExpression: "rate(1 minute)"
       State: "ENABLED"
       Targets:
         - Arn: !GetAtt EventQueue.Arn

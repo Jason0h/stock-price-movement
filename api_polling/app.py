@@ -24,7 +24,6 @@ def retrieve_price(utc_time_str: str) -> float | None:
     est_time_ts = utc_time_ts.tz_convert("America/New_York")
     start_time = est_time_ts - td(seconds=1000)
     end_time = est_time_ts + td(seconds=1000)
-    print(start_time, end_time)
     
     # poll yahoo finance api and retrieve stock price at between start_time and end_time. only works within market hours
     est_time_only = est_time_ts.time()
@@ -39,10 +38,13 @@ def retrieve_price(utc_time_str: str) -> float | None:
     return None
 
 def write_price_to_table(utc_time_str, stock_price) -> None:
-    table = boto3.resource("dynamodb", region_name="us-east-1").Table("StockPriceTable")
-    table.put_item(
-        Item={
-            "Primary": "Primary",
-            "DateTime": utc_time_str,
-            "Price": Decimal(str(stock_price))
-        })
+    try:
+        table = boto3.resource("dynamodb", region_name="us-east-1").Table("StockPriceTable")
+        table.put_item(
+            Item={
+                "Primary": "Primary",
+                "DateTime": utc_time_str,
+                "Price": Decimal(str(stock_price))
+            })
+    except Exception as e:
+        print(e)

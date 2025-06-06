@@ -3,6 +3,7 @@ from api_polling import app as ap_app
 from moto import mock_aws
 import boto3
 from datetime import datetime as dt
+import os
 
 @mock_aws
 def test_detect_movement():
@@ -34,6 +35,8 @@ def test_detect_movement():
     ap_app.write_price_to_table(UTC_TIME_STR_2, PRICE_2)
     detected, info = md_app.detect_movement(UTC_TIME_STR_2)
     assert(detected == True)
+    assert(info[0] == "2025-06-04T19:41:20Z")
+    assert(info[1] == "2025-06-04T19:45:20Z")
     assert(info[2] == 141.70)
     assert(info[3] == 141.20)
     assert(info[4] == -0.50)
@@ -51,3 +54,12 @@ def test_detect_movement():
     ap_app.write_price_to_table(UTC_TIME_STR_4, PRICE_4)
     detected, info = md_app.detect_movement(UTC_TIME_STR_4)
     assert(detected == False)
+
+@mock_aws
+def test_notify_of_movement():
+    sns = boto3.client("sns", region_name="us-east-1")
+    sns_topic_arn = sns.create_topic(Name="Topic")["TopicArn"]
+    os.environ["SNS_TOPIC_ARN"] = sns_topic_arn
+    info = ("2025-06-04T19:41:20Z", "2025-06-04T19:45:20Z", 141.70, 141.20, -0.50)
+    message = md_app.notify_of_movement(info)
+    assert(message == "Movement Detected: 2025-06-04T19:41:20Z -> 2025-06-04T19:45:20Z. $141.70 -> $141.20. -$0.50")
