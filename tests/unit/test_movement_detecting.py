@@ -62,4 +62,4 @@ def test_notify_of_movement():
     os.environ["SNS_TOPIC_ARN"] = sns_topic_arn
     info = ("2025-06-04T19:41:20Z", "2025-06-04T19:45:20Z", 141.70, 141.20, -0.50)
     message = md_app.notify_of_movement(info)
-    assert(message == "NVDA Movement Detected: 2025-06-04T19:41:20Z -> 2025-06-04T19:45:20Z. $141.70 -> $141.20. -$0.50")
+    assert(message == "NVDA Movement Detected: 2025-06-04T19:41:20Z --> 2025-06-04T19:45:20Z. $141.70 --> $141.20. -$0.50")

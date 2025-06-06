@@ -41,7 +41,7 @@ def detect_movement(est_time_str) -> tuple[bool, tuple | None]:
 
 def notify_of_movement(info) -> str:
     sns_topic_arn = os.environ.get("SNS_TOPIC_ARN")
-    message = f"{STOCK} Movement Detected: {info[0]} -> {info[1]}. ${info[2]:.2f} -> ${info[3]:.2f}. {"-" if info[4] < 0 else "+"}${abs(info[4]):.2f}"
+    message = f"{STOCK} Movement Detected: {info[0]} --> {info[1]}. ${info[2]:.2f} --> ${info[3]:.2f}. {"-" if info[4] < 0 else "+"}${abs(info[4]):.2f}"
     boto3.client("sns", region_name="us-east-1").publish(
         TopicArn = sns_topic_arn,
         Message = message
