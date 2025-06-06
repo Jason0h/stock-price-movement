@@ -4,8 +4,8 @@ from datetime import datetime as dt
 from datetime import timedelta as td
 import os
 
-MOVEMENT_THRESHOLD = 0.01 # $0.30
-TIME_THRESHOLD = td(minutes=5, seconds=30)
+MOVEMENT_THRESHOLD = 0.01 # $0.01
+TIME_THRESHOLD = td(minutes=1, seconds=30)
 
 def lambda_handler(event, context) -> None:
     est_time_str = event["Records"][0]["dynamodb"]["Keys"]["DateTime"]["S"]
