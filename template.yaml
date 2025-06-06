@@ -101,6 +101,9 @@ Resources:
           Properties:
             Stream: !GetAtt StockPriceTable.StreamArn
             StartingPosition: LATEST
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref MovementSNSTopic
   
   MovementSNSTopic:
     Type: AWS::SNS::Topic

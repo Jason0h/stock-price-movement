@@ -9,7 +9,7 @@ from decimal import Decimal
 
 STOCK = "NVDA"
 
-def lambda_handler(event, context): 
+def lambda_handler(event, context) -> None: 
     utc_time_str = json.loads(event["Records"][0]["body"])["message"]
     print("utc_time_str:", utc_time_str)
     stock_price = retrieve_price(utc_time_str)
@@ -17,7 +17,7 @@ def lambda_handler(event, context):
     if stock_price:
         write_price_to_table(utc_time_str, stock_price)
     
-def retrieve_price(utc_time_str):
+def retrieve_price(utc_time_str: str) -> float | None:
     # convert to est timezone and pandas timestamp format. then create +-30s offsets (for snapping to nearest full minute)
     utc_time_dt = dt.strptime(utc_time_str, "%Y-%m-%dT%H:%M:%SZ")
     utc_time_ts = pd.Timestamp(utc_time_dt, tz="UTC")
@@ -38,7 +38,7 @@ def retrieve_price(utc_time_str):
         return price
     return None
 
-def write_price_to_table(utc_time_str, stock_price):
+def write_price_to_table(utc_time_str, stock_price) -> None:
     table = boto3.resource("dynamodb", region_name="us-east-1").Table("StockPriceTable")
     table.put_item(
         Item={

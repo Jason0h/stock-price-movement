@@ -24,7 +24,6 @@ def test_retrieve_price():
 
 @mock_aws
 def test_write_price_to_table():
-    # use write_price_to_table to add an item to a mock table & query for its existence
     dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
     dynamodb.create_table(
         TableName="StockPriceTable",
@@ -38,6 +37,8 @@ def test_write_price_to_table():
         ],
         BillingMode="PAY_PER_REQUEST",
     )
+    
+    # use write_price_to_table to add an item to a mock table & query for its existence
     UTC_TIME_STR_1 = "2025-06-04T19:41:20Z"
     PRICE_1 = 141.70
     app.write_price_to_table(UTC_TIME_STR_1, PRICE_1)
