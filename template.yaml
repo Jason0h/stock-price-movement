@@ -13,7 +13,7 @@ Resources:
   CloudWatchEvent:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: "rate(1 minute)"
+      ScheduleExpression: "rate(5 minutes)"
       State: "ENABLED"
       Targets:
         - Arn: !GetAtt EventQueue.Arn
