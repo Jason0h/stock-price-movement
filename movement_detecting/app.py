@@ -5,7 +5,7 @@ from datetime import timedelta as td
 import os
 
 MOVEMENT_THRESHOLD = 0.50 # $0.50
-TIME_THRESHOLD = td(minutes=1, seconds=30)
+TIME_THRESHOLD = td(minutes=5, seconds=30)
 STOCK = "NVDA"
 
 def lambda_handler(event, context) -> None:

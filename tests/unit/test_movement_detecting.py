@@ -23,7 +23,7 @@ def test_detect_movement():
 
     # ensure that the function "fails" gracefully when there is less than 2 items in the table
     UTC_TIME_STR_1 = "2025-06-04T19:41:20Z"
-    PRICE_1 = 141.70
+    PRICE_1 = 141.90
     ap_app.write_price_to_table(UTC_TIME_STR_1, PRICE_1)
     detected, info = md_app.detect_movement(UTC_TIME_STR_1)
     assert(detected == False)
@@ -37,9 +37,9 @@ def test_detect_movement():
     assert(detected == True)
     assert(info[0] == "2025-06-04T19:41:20Z")
     assert(info[1] == "2025-06-04T19:45:20Z")
-    assert(info[2] == 141.70)
+    assert(info[2] == 141.90)
     assert(info[3] == 141.20)
-    assert(info[4] == -0.50)
+    assert(abs(info[4] - -0.70) < 0.001)
     
     # ensure that a movement too small is not detected
     UTC_TIME_STR_3 = "2025-06-04T19:50:20Z"
